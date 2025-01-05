@@ -17,11 +17,12 @@ module "security_group" {
 module "jenkins" {
   source                    = "./jenkins"
   ami_id                    = var.ec2_ami_id
-  instance_type             = "t2.medium"
+  #instance_type             = "t2.medium"
+  instance_type             = "t2.micro"
   tag_name                  = "Jenkins:Ubuntu Linux EC2"
   public_key                = var.public_key
   subnet_id                 = tolist(module.networking.dev_proj_1_public_subnets)[0]
-  sg_for_jenkins            = [module.security_group.sg_ec2_sg_ssh_http_id, module.security_group.sg_ec2_jenkins_port_8080]
+  sg_for_jenkins            = [module.security_group.sg_ec2_sg_ssh_http_id, module.security_group.sg_ec2_jenkins_port_8080_id]
   enable_public_ip_address  = true
   user_data_install_jenkins = templatefile("./jenkins-runner-script/jenkins-installer.sh", {})
 }
@@ -50,10 +51,10 @@ module "alb" {
   lb_listner_default_action = "forward"
   lb_https_listner_port     = 443
   lb_https_listner_protocol = "HTTPS"
-  dev_proj_1_acm_arn        = module.aws_ceritification_manager.dev_proj_1_acm_arn
+  #dev_proj_1_acm_arn        = module.aws_ceritification_manager.dev_proj_1_acm_arn
   lb_target_group_attachment_port = 8080
 }
-
+/*
 module "hosted_zone" {
   source          = "./hosted-zone"
   domain_name     = "jenkins.jhooq.org"
@@ -65,4 +66,4 @@ module "aws_ceritification_manager" {
   source         = "./certificate-manager"
   domain_name    = "jenkins.jhooq.org"
   hosted_zone_id = module.hosted_zone.hosted_zone_id
-}
+}*/

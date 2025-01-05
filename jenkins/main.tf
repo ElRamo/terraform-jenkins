@@ -8,7 +8,7 @@ variable "enable_public_ip_address" {}
 variable "user_data_install_jenkins" {}
 
 output "ssh_connection_string_for_ec2" {
-  value = format("%s%s", "ssh -i /Users/rahulwagh/.ssh/aws_ec2_terraform ubuntu@", aws_instance.jenkins_ec2_instance_ip.public_ip)
+  value = format("%s%s", "ssh -i /home/oelallali/devops-project2/jenkins-ec2 ubuntu@", aws_instance.jenkins_ec2_instance_ip.public_ip)
 }
 
 output "jenkins_ec2_instance_ip" {
@@ -33,8 +33,8 @@ resource "aws_instance" "jenkins_ec2_instance_ip" {
   user_data = var.user_data_install_jenkins
 
   metadata_options {
-    http_endpoint = "enabled"  # Enable the IMDSv2 endpoint
-    http_tokens   = "required" # Require the use of IMDSv2 tokens
+    http_endpoint = "enabled"  # Enable the IMDSv2 endpoint : permet de récupérer les métadonnées depuis l'instance EC2 (id, ip etc)
+    http_tokens   = "required" # Require the use of IMDSv2 tokens : pour sécuriser le http_endpoint
   }
 }
 
